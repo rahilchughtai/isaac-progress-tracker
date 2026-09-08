@@ -4,6 +4,7 @@
 
 - Upload your local Binding of Isaac: Repentance save file to see which achievements you've unlocked
 - Track progress for all characters, items, and secrets
+- Recommended Unlocks page suggests which locked items to prioritize next, sorted by in-game item quality
 - Fully client-side &mdash; no server, no accounts, no data leaves your browser
 - Mobile-friendly
 
@@ -23,3 +24,5 @@ This is a fully static site (see `netlify.toml`) &mdash; `npm run build` produce
 ## Data
 
 Achievement/unlock metadata (`src/data/unlocks.json`) is a frozen snapshot combining Steam's achievement schema with content from the [Binding of Isaac Rebirth Wiki](https://bindingofisaacrebirth.fandom.com/). It is not regenerated automatically; see git history for the previous PHP/MariaDB-based scraping pipeline if this ever needs to be refreshed for new game content.
+
+Item quality tiers (`src/data/item-quality.json`, used by the Recommended Unlocks page) are likewise a frozen snapshot, compiled from each item's quality field on the [Binding of Isaac Rebirth Wiki](https://bindingofisaacrebirth.fandom.com/wiki/Item_Quality), joined against this project's own achievement IDs. The Recommended Unlocks feature itself is inspired by [NotTwist's Isaac Unlock Tracker](https://github.com/NotTwist/isaac-unlocks-tracker).
