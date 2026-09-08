@@ -58,6 +58,29 @@ export function updateFilters(): void {
 	sanitizeFilterOptions();
 }
 
+// Shared across every sort field - a single toggle flips the direction of
+// whichever field is currently selected, rather than each field remembering
+// its own direction. Descending by default, matching the app's original
+// "highest percentage first" default appearance.
+let sortDescending = true;
+
+function updateSortDirectionToggle(): void {
+	const icon = document.getElementById("sort-direction-icon");
+	const button = document.getElementById("sort-direction-toggle");
+
+	if (icon) {
+		icon.textContent = sortDescending ? "↓" : "↑";
+	}
+
+	if (button) {
+		const label = sortDescending
+			? "Sort descending, click to sort ascending"
+			: "Sort ascending, click to sort descending";
+		button.title = sortDescending ? "Sort descending" : "Sort ascending";
+		button.setAttribute("aria-label", label);
+	}
+}
+
 function applySort(sort: string): void {
 	const tbody = document.querySelector("#unlocks_table tbody");
 	if (!tbody) {
@@ -65,25 +88,27 @@ function applySort(sort: string): void {
 	}
 
 	const rows = Array.from(tbody.querySelectorAll<HTMLTableRowElement>("tr.unlock-incomplete"));
+	const direction = sortDescending ? -1 : 1;
 
 	rows.sort((a, b) => {
 		if (sort === "percentage") {
-			return Number(b.getAttribute("data-percentage")) - Number(a.getAttribute("data-percentage"));
+			return direction * (Number(a.getAttribute("data-percentage")) - Number(b.getAttribute("data-percentage")));
 		}
 
 		const attribute = `data-${sort}`;
 		const aContent = a.getAttribute(attribute) ?? "";
 		const bContent = b.getAttribute(attribute) ?? "";
 
+		// entries with no value for this field always sort last, in either direction
 		if (aContent === bContent) {
 			return 0;
-		} else if (!aContent && bContent) {
+		} else if (aContent === "") {
 			return 1;
-		} else if (aContent && !bContent) {
+		} else if (bContent === "") {
 			return -1;
 		}
 
-		return aContent.localeCompare(bContent);
+		return direction * aContent.localeCompare(bContent);
 	});
 
 	rows.forEach((row) => tbody.appendChild(row));
@@ -93,6 +118,7 @@ export function initFilters(): void {
 	const searchInput = document.getElementById("table-search") as HTMLInputElement;
 	const filterSelect = document.getElementById("table-filter") as HTMLSelectElement;
 	const sortSelect = document.getElementById("table-sort") as HTMLSelectElement;
+	const sortDirectionButton = document.getElementById("sort-direction-toggle");
 	const resetButton = document.getElementById("filters-reset");
 
 	searchInput.addEventListener("input", function () {
@@ -134,10 +160,18 @@ export function initFilters(): void {
 		applySort(this.value);
 	});
 
+	sortDirectionButton?.addEventListener("click", () => {
+		sortDescending = !sortDescending;
+		updateSortDirectionToggle();
+		applySort(sortSelect.value);
+	});
+
 	resetButton?.addEventListener("click", () => {
 		searchInput.value = "";
 		filterSelect.value = "";
 		sortSelect.value = "percentage";
+		sortDescending = true;
+		updateSortDirectionToggle();
 
 		document
 			.querySelectorAll<HTMLElement>("#unlocks_table tbody tr.unlock-incomplete, #unlocked-grid .unlocked-card.unlocked-card-visible")

@@ -173,6 +173,15 @@ a {
 	color: var(--text-muted);
 }
 
+.sort-direction-toggle {
+	flex-shrink: 0;
+	width: 2.75rem;
+	padding-left: 0;
+	padding-right: 0;
+	font-size: 1.1rem;
+	line-height: 1;
+}
+
 /* table + filters bar */
 
 #table-manager {

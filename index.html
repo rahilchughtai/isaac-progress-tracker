@@ -89,7 +89,7 @@
 					</select>
 				</div>
 
-				<div class="flex-fill me-2">
+				<div class="flex-fill me-2 d-flex gap-2">
 					<select class="form-select" id="table-sort">
 						<option value="percentage">Sort by Percentage</option>
 						<option value="name">Sort by Title</option>
@@ -97,6 +97,10 @@
 						<option value="boss">Sort by Boss</option>
 						<option value="category">Sort by Category</option>
 					</select>
+
+					<button type="button" class="btn btn-dark sort-direction-toggle" id="sort-direction-toggle" title="Sort descending" aria-label="Sort descending, click to sort ascending">
+						<span id="sort-direction-icon" aria-hidden="true">&darr;</span>
+					</button>
 				</div>
 
 				<div>
