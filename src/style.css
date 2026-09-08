@@ -502,3 +502,29 @@ code {
 	background: var(--surface-hover);
 	color: var(--text-muted);
 }
+
+/* quality badge shown directly on an item's icon, e.g. in the main table
+   and trophy case, wherever the achievement's item quality is known */
+
+.icon-badge-wrap {
+	position: relative;
+	display: inline-block;
+}
+
+.quality-badge-overlay {
+	position: absolute;
+	min-width: 1.9em;
+	padding: 0.1em 0.4em;
+	font-size: 0.6rem;
+	box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+.quality-badge-overlay-main {
+	bottom: -6px;
+	right: -6px;
+}
+
+.quality-badge-overlay-alt {
+	top: -6px;
+	right: -6px;
+}
