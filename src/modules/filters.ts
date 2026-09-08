@@ -1,16 +1,25 @@
 import { numberFormat } from "./utils";
 
-export function updateUnlockedSectionCount(): void {
-	const countEl = document.getElementById("unlocked-section-count");
+function countVisible(selector: string): number {
+	return Array.from(document.querySelectorAll<HTMLElement>(selector)).filter(
+		(el) => el.style.display !== "none",
+	).length;
+}
 
-	if (!countEl) {
-		return;
+export function updateSectionCounts(): void {
+	const remainingCountEl = document.getElementById("remaining-section-count");
+
+	if (remainingCountEl) {
+		const visibleCount = countVisible("#unlocks_table tbody tr.unlock-incomplete");
+		remainingCountEl.textContent = `${numberFormat(visibleCount)} Remaining`;
 	}
 
-	const cards = document.querySelectorAll<HTMLElement>("#unlocked-grid .unlocked-card.unlocked-card-visible");
-	const visibleCount = Array.from(cards).filter((card) => card.style.display !== "none").length;
+	const unlockedCountEl = document.getElementById("unlocked-section-count");
 
-	countEl.textContent = `${numberFormat(visibleCount)} Unlocked`;
+	if (unlockedCountEl) {
+		const visibleCount = countVisible("#unlocked-grid .unlocked-card.unlocked-card-visible");
+		unlockedCountEl.textContent = `${numberFormat(visibleCount)} Unlocked`;
+	}
 }
 
 function updateCountedFilter(optgroupId: string, attribute: string): void {
@@ -133,7 +142,7 @@ export function initFilters(): void {
 				row.style.display = searchData.includes(search) ? "" : "none";
 			});
 
-		updateUnlockedSectionCount();
+		updateSectionCounts();
 	});
 
 	filterSelect.addEventListener("change", function () {
@@ -153,7 +162,7 @@ export function initFilters(): void {
 		(document.getElementById("character-filter") as HTMLSelectElement).value = "";
 		(document.getElementById("boss-filter") as HTMLSelectElement).value = "";
 
-		updateUnlockedSectionCount();
+		updateSectionCounts();
 	});
 
 	sortSelect.addEventListener("change", function () {
@@ -179,7 +188,7 @@ export function initFilters(): void {
 				row.style.display = "";
 			});
 
-		updateUnlockedSectionCount();
+		updateSectionCounts();
 		sortSelect.dispatchEvent(new Event("change"));
 	});
 }

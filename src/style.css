@@ -259,37 +259,29 @@ code {
 	color: var(--brand-violet);
 }
 
-/* unlocked achievements trophy case */
+/* collapsible section toggles (remaining table + unlocked trophy case) */
 
-.unlocked-toggle {
+.section-toggle {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	gap: 0.6em;
-	background: var(--accent-green-soft);
-	border: 1px solid var(--accent-green-border);
-	color: var(--accent-green-bright);
 	border-radius: 14px;
 	padding: 0.65em 1em;
 	font-weight: 600;
 	transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 
-.unlocked-toggle:hover {
-	background: rgba(34, 197, 94, 0.2);
-	border-color: var(--accent-green-bright);
-}
-
-.unlocked-toggle:active {
+.section-toggle:active {
 	transform: translateY(1px);
 }
 
-.unlocked-toggle-check {
+.section-toggle-check {
 	font-size: 1.1em;
 	line-height: 1;
 }
 
-.unlocked-toggle-chevron {
+.section-toggle-chevron {
 	width: 0;
 	height: 0;
 	border-left: 5px solid transparent;
@@ -298,9 +290,33 @@ code {
 	transition: transform 0.2s ease;
 }
 
-.unlocked-toggle[aria-expanded="true"] .unlocked-toggle-chevron {
+.section-toggle[aria-expanded="true"] .section-toggle-chevron {
 	transform: rotate(180deg);
 }
+
+.section-toggle-green {
+	background: var(--accent-green-soft);
+	border: 1px solid var(--accent-green-border);
+	color: var(--accent-green-bright);
+}
+
+.section-toggle-green:hover {
+	background: rgba(34, 197, 94, 0.2);
+	border-color: var(--accent-green-bright);
+}
+
+.section-toggle-purple {
+	background: rgba(139, 92, 246, 0.12);
+	border: 1px solid var(--border-subtle);
+	color: var(--brand-violet);
+}
+
+.section-toggle-purple:hover {
+	background: rgba(139, 92, 246, 0.2);
+	border-color: var(--brand-violet);
+}
+
+/* unlocked achievements trophy case */
 
 .unlocked-grid {
 	display: grid;

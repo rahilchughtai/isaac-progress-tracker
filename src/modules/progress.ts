@@ -1,5 +1,5 @@
 import { numberFormat } from "./utils";
-import { updateFilters, updateUnlockedSectionCount } from "./filters";
+import { updateFilters, updateSectionCounts } from "./filters";
 
 const STORAGE_KEY_PROGRESS = "my-progress";
 
@@ -93,10 +93,12 @@ export function updateMyProgress(): void {
 		card.classList.toggle("unlocked-card-visible", unlockedIds.has(id));
 	});
 
-	// All cards' inline display was just reset above (no filter applied yet),
-	// so this also reflects the correct un-filtered total at this point.
-	updateUnlockedSectionCount();
+	// Both loops above just reset every row/card's inline display based purely
+	// on lock status (no filter applied yet), so this also reflects the
+	// correct un-filtered totals for both sections at this point.
+	updateSectionCounts();
 
+	document.getElementById("remaining-section")?.classList.toggle("d-none", numRemaining === 0);
 	document.getElementById("unlocked-section")?.classList.toggle("d-none", numUnlocked === 0);
 
 	let progressText = "";
