@@ -29,19 +29,20 @@ export function computeUnlockMeta(unlock: Unlock, categories: Record<string, str
 }
 
 // Small corner badge shown on an item's icon when its in-game quality (Q0-Q4)
-// is known. "main" is used where the icon has no other overlay; "alt" is used
-// on the trophy case, where the unlocked checkmark already occupies the
+// is known (or a "Q?" badge when it isn't, used on the Recommended page).
+// "main" is used where the icon has no other overlay; "alt" is used on the
+// trophy case, where the unlocked checkmark already occupies the
 // bottom-right corner.
-function createQualityBadge(quality: number, variant: "main" | "alt"): HTMLSpanElement {
+export function createQualityBadge(quality: number | null, variant: "main" | "alt"): HTMLSpanElement {
 	const badge = document.createElement("span");
 	badge.classList.add(
 		"quality-badge",
 		"quality-badge-overlay",
 		variant === "alt" ? "quality-badge-overlay-alt" : "quality-badge-overlay-main",
-		`quality-badge-${quality}`,
+		quality === null ? "quality-badge-unknown" : `quality-badge-${quality}`,
 	);
 	badge.setAttribute("aria-hidden", "true");
-	badge.textContent = `Q${quality}`;
+	badge.textContent = quality === null ? "Q?" : `Q${quality}`;
 	return badge;
 }
 
@@ -199,7 +200,11 @@ function injectUnlockTableRow(unlock: Unlock, categories: Record<string, string>
 	document.querySelector("#unlocks_table tbody")?.appendChild(row);
 }
 
-function buildUnlockedPopoverContent(unlock: Unlock, meta: UnlockMeta): HTMLElement {
+export function buildAchievementPopoverContent(
+	unlock: Unlock,
+	meta: UnlockMeta,
+	options: { includeUnlockMethod: boolean } = { includeUnlockMethod: true },
+): HTMLElement {
 	const wrapper = document.createElement("div");
 	wrapper.classList.add("unlocked-popover-content");
 
@@ -210,7 +215,7 @@ function buildUnlockedPopoverContent(unlock: Unlock, meta: UnlockMeta): HTMLElem
 		wrapper.appendChild(description);
 	}
 
-	if (unlock.unlockMethod !== "") {
+	if (options.includeUnlockMethod && unlock.unlockMethod !== "") {
 		const method = document.createElement("p");
 		method.classList.add("mb-1");
 		method.textContent = unlock.unlockMethod;
@@ -264,7 +269,7 @@ export function createUnlockedCard(
 		placement: "top",
 		html: true,
 		title: unlock.displayName,
-		content: buildUnlockedPopoverContent(unlock, meta),
+		content: buildAchievementPopoverContent(unlock, meta),
 		customClass: "unlocked-popover",
 	});
 

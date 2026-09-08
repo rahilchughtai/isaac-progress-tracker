@@ -4,9 +4,11 @@ import type { UnlocksData } from "./types/unlocks";
 import type { ItemQualityMap } from "./types/item-quality";
 import { loadStoredProgress } from "./modules/progress";
 import { renderRecommendedUnlocks } from "./modules/recommended-unlocks";
+import { initRecommendedFilters } from "./modules/recommended-filters";
 
 const data = unlocksData as UnlocksData;
 const qualityMap = itemQuality as ItemQualityMap;
 const stored = loadStoredProgress();
 
+initRecommendedFilters();
 renderRecommendedUnlocks(data, qualityMap, stored ? new Set(stored.unlockedIds) : null);
