@@ -1,4 +1,5 @@
 import type { Unlock, UnlocksData } from "../types/unlocks";
+import type { ItemQualityMap } from "../types/item-quality";
 import { updateMyProgress } from "./progress";
 import { updateFilters, sortByCurrentSelection } from "./filters";
 
@@ -7,14 +8,14 @@ declare const bootstrap: {
 	Popover: new (element: Element, options?: Record<string, unknown>) => unknown;
 };
 
-interface UnlockMeta {
+export interface UnlockMeta {
 	categoryName: string;
 	characterName: string;
 	bossName: string;
 	searchData: string;
 }
 
-function computeUnlockMeta(unlock: Unlock, categories: Record<string, string>): UnlockMeta {
+export function computeUnlockMeta(unlock: Unlock, categories: Record<string, string>): UnlockMeta {
 	const categoryName = unlock.category in categories ? categories[unlock.category] : "";
 	const characterName = unlock.as === false ? "" : unlock.as;
 	const bossName = unlock.boss === false ? "" : unlock.boss;
@@ -25,6 +26,24 @@ function computeUnlockMeta(unlock: Unlock, categories: Record<string, string>): 
 		.trim();
 
 	return { categoryName, characterName, bossName, searchData };
+}
+
+// Small corner badge shown on an item's icon when its in-game quality (Q0-Q4)
+// is known (or a "Q?" badge when it isn't, used on the Recommended page).
+// "main" is used where the icon has no other overlay; "alt" is used on the
+// trophy case, where the unlocked checkmark already occupies the
+// bottom-right corner.
+export function createQualityBadge(quality: number | null, variant: "main" | "alt"): HTMLSpanElement {
+	const badge = document.createElement("span");
+	badge.classList.add(
+		"quality-badge",
+		"quality-badge-overlay",
+		variant === "alt" ? "quality-badge-overlay-alt" : "quality-badge-overlay-main",
+		quality === null ? "quality-badge-unknown" : `quality-badge-${quality}`,
+	);
+	badge.setAttribute("aria-hidden", "true");
+	badge.textContent = quality === null ? "Q?" : `Q${quality}`;
+	return badge;
 }
 
 function textCell(text: string, classNames: string[] = []): HTMLTableCellElement {
@@ -46,7 +65,7 @@ function emptyCell(classNames: string[]): HTMLTableCellElement {
 	return cell;
 }
 
-function injectUnlockTableRow(unlock: Unlock, categories: Record<string, string>): void {
+function injectUnlockTableRow(unlock: Unlock, categories: Record<string, string>, qualityMap: ItemQualityMap): void {
 	const row = document.createElement("tr");
 	const { categoryName, characterName, bossName, searchData } = computeUnlockMeta(unlock, categories);
 
@@ -74,7 +93,14 @@ function injectUnlockTableRow(unlock: Unlock, categories: Record<string, string>
 	img.width = 64;
 	img.height = 64;
 
+	link.classList.add("icon-badge-wrap");
 	link.appendChild(img);
+
+	const quality = qualityMap[unlock.name];
+	if (quality !== undefined) {
+		link.appendChild(createQualityBadge(quality, "main"));
+	}
+
 	cell.appendChild(link);
 
 	const mobilePercentage = document.createElement("div");
@@ -174,7 +200,11 @@ function injectUnlockTableRow(unlock: Unlock, categories: Record<string, string>
 	document.querySelector("#unlocks_table tbody")?.appendChild(row);
 }
 
-function buildUnlockedPopoverContent(unlock: Unlock, meta: UnlockMeta): HTMLElement {
+export function buildAchievementPopoverContent(
+	unlock: Unlock,
+	meta: UnlockMeta,
+	options: { includeUnlockMethod: boolean } = { includeUnlockMethod: true },
+): HTMLElement {
 	const wrapper = document.createElement("div");
 	wrapper.classList.add("unlocked-popover-content");
 
@@ -185,7 +215,7 @@ function buildUnlockedPopoverContent(unlock: Unlock, meta: UnlockMeta): HTMLElem
 		wrapper.appendChild(description);
 	}
 
-	if (unlock.unlockMethod !== "") {
+	if (options.includeUnlockMethod && unlock.unlockMethod !== "") {
 		const method = document.createElement("p");
 		method.classList.add("mb-1");
 		method.textContent = unlock.unlockMethod;
@@ -218,7 +248,11 @@ function buildUnlockedPopoverContent(unlock: Unlock, meta: UnlockMeta): HTMLElem
 	return wrapper;
 }
 
-function injectUnlockedCard(unlock: Unlock, categories: Record<string, string>): void {
+export function createUnlockedCard(
+	unlock: Unlock,
+	categories: Record<string, string>,
+	qualityMap: ItemQualityMap,
+): HTMLLIElement {
 	const meta = computeUnlockMeta(unlock, categories);
 
 	const li = document.createElement("li");
@@ -235,7 +269,7 @@ function injectUnlockedCard(unlock: Unlock, categories: Record<string, string>):
 		placement: "top",
 		html: true,
 		title: unlock.displayName,
-		content: buildUnlockedPopoverContent(unlock, meta),
+		content: buildAchievementPopoverContent(unlock, meta, { includeUnlockMethod: false }),
 		customClass: "unlocked-popover",
 	});
 
@@ -256,6 +290,11 @@ function injectUnlockedCard(unlock: Unlock, categories: Record<string, string>):
 	badge.textContent = "✓";
 	iconWrap.appendChild(badge);
 
+	const quality = qualityMap[unlock.name];
+	if (quality !== undefined) {
+		iconWrap.appendChild(createQualityBadge(quality, "alt"));
+	}
+
 	li.appendChild(iconWrap);
 
 	const name = document.createElement("span");
@@ -263,6 +302,18 @@ function injectUnlockedCard(unlock: Unlock, categories: Record<string, string>):
 	name.textContent = unlock.displayName;
 	li.appendChild(name);
 
+	if (unlock.unlockMethod !== "") {
+		const condition = document.createElement("span");
+		condition.classList.add("unlocked-condition");
+		condition.textContent = unlock.unlockMethod;
+		li.appendChild(condition);
+	}
+
+	return li;
+}
+
+function injectUnlockedCard(unlock: Unlock, categories: Record<string, string>, qualityMap: ItemQualityMap): void {
+	const li = createUnlockedCard(unlock, categories, qualityMap);
 	document.querySelector("#unlocked-grid")?.appendChild(li);
 }
 
@@ -286,7 +337,7 @@ function populateFilterOptions(
 	});
 }
 
-export function ingestUnlocksData(data: UnlocksData): void {
+export function ingestUnlocksData(data: UnlocksData, qualityMap: ItemQualityMap): void {
 	const sortedCategories = Object.entries(data.categories)
 		.map(([id, name]) => ({ id, name }))
 		.sort((a, b) => a.name.localeCompare(b.name));
@@ -312,8 +363,8 @@ export function ingestUnlocksData(data: UnlocksData): void {
 		populateFilterOptions("boss-filter", data.boss_names, "boss");
 	}
 
-	data.unlocks.forEach((unlock) => injectUnlockTableRow(unlock, data.categories));
-	data.unlocks.forEach((unlock) => injectUnlockedCard(unlock, data.categories));
+	data.unlocks.forEach((unlock) => injectUnlockTableRow(unlock, data.categories, qualityMap));
+	data.unlocks.forEach((unlock) => injectUnlockedCard(unlock, data.categories, qualityMap));
 
 	updateMyProgress();
 	updateFilters();

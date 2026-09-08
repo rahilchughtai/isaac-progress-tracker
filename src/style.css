@@ -382,6 +382,12 @@ code {
 	line-height: 1.2;
 }
 
+.unlocked-condition {
+	font-size: 0.66rem;
+	color: var(--text-muted);
+	line-height: 1.25;
+}
+
 @keyframes unlocked-pop-in {
 	from {
 		opacity: 0;
@@ -418,48 +424,33 @@ code {
 
 /* recommended unlocks page */
 
-.recommend-list {
-	display: flex;
-	flex-direction: column;
-	gap: 0.6rem;
-	padding: 0;
-	margin: 1rem 0 0;
-}
-
 .recommend-card {
-	display: flex;
+	display: none;
+	flex-direction: column;
 	align-items: center;
-	gap: 0.85rem;
-	padding: 0.65rem 0.85rem;
-	background: var(--surface);
+	gap: 0.4rem;
+	text-align: center;
+	padding: 0.75rem 0.5rem;
+	background: rgba(139, 92, 246, 0.08);
 	border: 1px solid var(--border-subtle);
 	border-radius: 12px;
+	cursor: help;
 }
 
-.recommend-icon-link img {
-	border-radius: 8px;
-	flex-shrink: 0;
-}
-
-.recommend-body {
-	min-width: 0;
-	flex: 1;
-}
-
-.recommend-title-row {
+.recommend-card.recommend-card-visible {
 	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 0.5rem;
 }
 
-.recommend-title-row a {
+.recommend-name {
+	font-size: 0.72rem;
 	color: var(--text-primary);
-	text-decoration: none;
+	line-height: 1.2;
 }
 
-.recommend-title-row a:hover strong {
-	color: var(--brand-violet);
+.recommend-condition {
+	font-size: 0.66rem;
+	color: var(--text-muted);
+	line-height: 1.25;
 }
 
 .quality-badge {
@@ -501,4 +492,30 @@ code {
 .quality-badge-unknown {
 	background: var(--surface-hover);
 	color: var(--text-muted);
+}
+
+/* quality badge shown directly on an item's icon, e.g. in the main table
+   and trophy case, wherever the achievement's item quality is known */
+
+.icon-badge-wrap {
+	position: relative;
+	display: inline-block;
+}
+
+.quality-badge-overlay {
+	position: absolute;
+	min-width: 1.9em;
+	padding: 0.1em 0.4em;
+	font-size: 0.6rem;
+	box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+.quality-badge-overlay-main {
+	bottom: -6px;
+	right: -6px;
+}
+
+.quality-badge-overlay-alt {
+	top: -6px;
+	right: -6px;
 }

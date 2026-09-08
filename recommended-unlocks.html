@@ -57,17 +57,51 @@
 			</div>
 		</div>
 
-		<div class="d-none" id="recommended-empty-all-unlocked">
-			<div class="card bg-body-tertiary border-0 p-4 text-center mx-2 mx-md-0">
-				<p class="mb-0">You've unlocked every tracked item. Nothing left to recommend!</p>
+		<div class="d-none" id="recommended-content">
+			<div class="d-flex flex-row flex-wrap flex-md-nowrap justify-content-between align-items-center px-1 px-sm-2 py-2 bg-body-tertiary mb-3" id="recommended-manager">
+				<div class="flex-fill me-md-2 mb-2 mb-md-0">
+					<input type="search" class="form-control" id="recommended-search" placeholder="Search...">
+				</div>
+
+				<div class="flex-fill me-md-2 mb-2 mb-md-0">
+					<select class="form-select" id="recommended-filter">
+						<option value="">All Items</option>
+
+						<optgroup label="Characters" id="recommended-character-filter"></optgroup>
+
+						<optgroup label="Bosses" id="recommended-boss-filter"></optgroup>
+					</select>
+				</div>
+
+				<div>
+					<button type="button" class="btn btn-dark" id="recommended-reset">Reset</button>
+				</div>
 			</div>
-		</div>
 
-		<div class="d-none" id="recommended-grid-container">
-			<ul class="recommend-list list-unstyled" id="recommended-grid" aria-label="Recommended unlocks"></ul>
+			<div id="recommended-section">
+				<button type="button" class="section-toggle section-toggle-purple w-100 mb-3" id="recommended-toggle"
+					data-bs-toggle="collapse" data-bs-target="#recommended-collapse"
+					aria-expanded="true" aria-controls="recommended-collapse">
+					<span class="section-toggle-text" id="recommended-section-count">0 Recommended</span>
+					<span class="section-toggle-chevron" aria-hidden="true"></span>
+				</button>
 
-			<div class="text-center mt-3 d-none" id="recommended-show-more-container">
-				<button type="button" class="btn btn-dark" id="recommended-show-more">Show more</button>
+				<div class="collapse show" id="recommended-collapse">
+					<ul class="unlocked-grid list-unstyled" id="recommended-grid" aria-label="Recommended unlocks"></ul>
+				</div>
+			</div>
+
+			<div class="d-none mt-4" id="recommended-unlocked-section">
+				<button type="button" class="section-toggle section-toggle-green w-100" id="recommended-unlocked-toggle"
+					data-bs-toggle="collapse" data-bs-target="#recommended-unlocked-collapse"
+					aria-expanded="false" aria-controls="recommended-unlocked-collapse">
+					<span class="section-toggle-check" aria-hidden="true">&check;</span>
+					<span class="section-toggle-text" id="recommended-unlocked-section-count">0 Unlocked</span>
+					<span class="section-toggle-chevron" aria-hidden="true"></span>
+				</button>
+				<div class="collapse" id="recommended-unlocked-collapse">
+					<ul class="unlocked-grid list-unstyled" id="recommended-unlocked-grid" aria-label="Unlocked items"></ul>
+				</div>
 			</div>
 		</div>
 
