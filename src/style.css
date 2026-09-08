@@ -382,6 +382,12 @@ code {
 	line-height: 1.2;
 }
 
+.unlocked-condition {
+	font-size: 0.66rem;
+	color: var(--text-muted);
+	line-height: 1.25;
+}
+
 @keyframes unlocked-pop-in {
 	from {
 		opacity: 0;

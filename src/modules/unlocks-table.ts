@@ -269,7 +269,7 @@ export function createUnlockedCard(
 		placement: "top",
 		html: true,
 		title: unlock.displayName,
-		content: buildAchievementPopoverContent(unlock, meta),
+		content: buildAchievementPopoverContent(unlock, meta, { includeUnlockMethod: false }),
 		customClass: "unlocked-popover",
 	});
 
@@ -301,6 +301,13 @@ export function createUnlockedCard(
 	name.classList.add("unlocked-name");
 	name.textContent = unlock.displayName;
 	li.appendChild(name);
+
+	if (unlock.unlockMethod !== "") {
+		const condition = document.createElement("span");
+		condition.classList.add("unlocked-condition");
+		condition.textContent = unlock.unlockMethod;
+		li.appendChild(condition);
+	}
 
 	return li;
 }

@@ -114,7 +114,10 @@ export function renderRecommendedUnlocks(
 
 	recommended.forEach((entry) => injectRecommendedCard(entry, data.categories));
 
-	const unlockedItems = itemUnlocks.filter((u) => unlockedIds.has(u.name));
+	const unlockedItems = itemUnlocks
+		.filter((u) => unlockedIds.has(u.name))
+		.sort((a, b) => (qualityMap[b.name] ?? -1) - (qualityMap[a.name] ?? -1));
+
 	unlockedItems.forEach((unlock) => {
 		const card = createUnlockedCard(unlock, data.categories, qualityMap);
 		// createUnlockedCard's "visible" state is normally toggled reactively by
