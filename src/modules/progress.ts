@@ -105,7 +105,7 @@ export function updateMyProgress(): void {
 		progressText += `${numberFormat(numUnlocked)}/${numberFormat(numUnlocks)} - `;
 	}
 
-	progressText += `${numRemaining} remaining (${numberFormat(((numUnlocks - numUnlocked) / numUnlocks) * 100, 1)}%)`;
+	progressText += `${numRemaining} remaining (${numberFormat((numUnlocked / numUnlocks) * 100, 1)}% unlocked)`;
 
 	document.querySelectorAll(".unlock_progress_text").forEach((el) => {
 		el.textContent = progressText;
