@@ -1,3 +1,18 @@
+import { numberFormat } from "./utils";
+
+export function updateUnlockedSectionCount(): void {
+	const countEl = document.getElementById("unlocked-section-count");
+
+	if (!countEl) {
+		return;
+	}
+
+	const cards = document.querySelectorAll<HTMLElement>("#unlocked-grid .unlocked-card.unlocked-card-visible");
+	const visibleCount = Array.from(cards).filter((card) => card.style.display !== "none").length;
+
+	countEl.textContent = `${numberFormat(visibleCount)} Unlocked`;
+}
+
 function updateCountedFilter(optgroupId: string, attribute: string): void {
 	const counts: Record<string, number> = {};
 
@@ -91,6 +106,8 @@ export function initFilters(): void {
 				const searchData = row.getAttribute("data-search-data") ?? "";
 				row.style.display = searchData.includes(search) ? "" : "none";
 			});
+
+		updateUnlockedSectionCount();
 	});
 
 	filterSelect.addEventListener("change", function () {
@@ -109,6 +126,8 @@ export function initFilters(): void {
 
 		(document.getElementById("character-filter") as HTMLSelectElement).value = "";
 		(document.getElementById("boss-filter") as HTMLSelectElement).value = "";
+
+		updateUnlockedSectionCount();
 	});
 
 	sortSelect.addEventListener("change", function () {
@@ -126,6 +145,7 @@ export function initFilters(): void {
 				row.style.display = "";
 			});
 
+		updateUnlockedSectionCount();
 		sortSelect.dispatchEvent(new Event("change"));
 	});
 }
