@@ -89,7 +89,7 @@
 					</select>
 				</div>
 
-				<div class="flex-fill me-2">
+				<div class="flex-fill me-2 d-flex gap-2">
 					<select class="form-select" id="table-sort">
 						<option value="percentage">Sort by Percentage</option>
 						<option value="name">Sort by Title</option>
@@ -97,6 +97,10 @@
 						<option value="boss">Sort by Boss</option>
 						<option value="category">Sort by Category</option>
 					</select>
+
+					<button type="button" class="btn btn-dark sort-direction-toggle" id="sort-direction-toggle" title="Sort descending" aria-label="Sort descending, click to sort ascending">
+						<span id="sort-direction-icon" aria-hidden="true">&darr;</span>
+					</button>
 				</div>
 
 				<div>
@@ -104,20 +108,44 @@
 				</div>
 			</div>
 
-			<div class="table-responsive">
-				<table class="table table-hover position-relative" id="unlocks_table">
-					<thead>
-						<tr>
-							<th width="64"></th>
-							<th>Unlock</th>
-							<th class="text-center d-none d-md-table-cell" width="100">Character</th>
-							<th class="text-center d-none d-md-table-cell" width="100">Boss</th>
-							<th class="d-none d-md-table-cell" width="100">Category</th>
-							<th class="text-center d-none d-md-table-cell" title="Percentage of players that have this achievement">%</th>
-						</tr>
-					</thead>
-					<tbody></tbody>
-				</table>
+			<div id="remaining-section">
+				<button type="button" class="section-toggle section-toggle-purple w-100 mb-3" id="remaining-toggle"
+					data-bs-toggle="collapse" data-bs-target="#remaining-collapse"
+					aria-expanded="true" aria-controls="remaining-collapse">
+					<span class="section-toggle-text" id="remaining-section-count">0 Remaining</span>
+					<span class="section-toggle-chevron" aria-hidden="true"></span>
+				</button>
+
+				<div class="collapse show" id="remaining-collapse">
+					<div class="table-responsive">
+						<table class="table table-hover position-relative" id="unlocks_table">
+							<thead>
+								<tr>
+									<th width="64"></th>
+									<th>Unlock</th>
+									<th class="text-center d-none d-md-table-cell" width="100">Character</th>
+									<th class="text-center d-none d-md-table-cell" width="100">Boss</th>
+									<th class="d-none d-md-table-cell" width="100">Category</th>
+									<th class="text-center d-none d-md-table-cell" title="Percentage of players that have this achievement">%</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="d-none mt-4" id="unlocked-section">
+				<button type="button" class="section-toggle section-toggle-green w-100" id="unlocked-toggle"
+					data-bs-toggle="collapse" data-bs-target="#unlocked-collapse"
+					aria-expanded="false" aria-controls="unlocked-collapse">
+					<span class="section-toggle-check" aria-hidden="true">&check;</span>
+					<span class="section-toggle-text" id="unlocked-section-count">0 Unlocked</span>
+					<span class="section-toggle-chevron" aria-hidden="true"></span>
+				</button>
+				<div class="collapse" id="unlocked-collapse">
+					<ul class="unlocked-grid list-unstyled" id="unlocked-grid" aria-label="Unlocked achievements"></ul>
+				</div>
 			</div>
 		</div>
 

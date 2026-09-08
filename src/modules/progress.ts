@@ -1,5 +1,5 @@
 import { numberFormat } from "./utils";
-import { updateFilters } from "./filters";
+import { updateFilters, updateSectionCounts } from "./filters";
 
 const STORAGE_KEY_PROGRESS = "my-progress";
 
@@ -82,13 +82,32 @@ export function updateMyProgress(): void {
 		}
 	});
 
+	document.querySelectorAll<HTMLLIElement>("#unlocked-grid .unlocked-card").forEach((card) => {
+		const id = card.getAttribute("data-id") ?? "";
+
+		// Reset any inline display left over from a previous search/filter
+		// application - only cards carrying "unlocked-card-visible" are ever
+		// eligible to be shown, so locked achievements can never leak through
+		// a stale or newly-applied filter.
+		card.style.display = "";
+		card.classList.toggle("unlocked-card-visible", unlockedIds.has(id));
+	});
+
+	// Both loops above just reset every row/card's inline display based purely
+	// on lock status (no filter applied yet), so this also reflects the
+	// correct un-filtered totals for both sections at this point.
+	updateSectionCounts();
+
+	document.getElementById("remaining-section")?.classList.toggle("d-none", numRemaining === 0);
+	document.getElementById("unlocked-section")?.classList.toggle("d-none", numUnlocked === 0);
+
 	let progressText = "";
 
 	if (numUnlocked > 0) {
 		progressText += `${numberFormat(numUnlocked)}/${numberFormat(numUnlocks)} - `;
 	}
 
-	progressText += `${numRemaining} remaining (${numberFormat(((numUnlocks - numUnlocked) / numUnlocks) * 100, 1)}%)`;
+	progressText += `${numRemaining} remaining (${numberFormat((numUnlocked / numUnlocks) * 100, 1)}% unlocked)`;
 
 	document.querySelectorAll(".unlock_progress_text").forEach((el) => {
 		el.textContent = progressText;
