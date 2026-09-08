@@ -84,7 +84,13 @@ export function updateMyProgress(): void {
 
 	document.querySelectorAll<HTMLLIElement>("#unlocked-grid .unlocked-card").forEach((card) => {
 		const id = card.getAttribute("data-id") ?? "";
-		card.style.display = unlockedIds.has(id) ? "" : "none";
+
+		// Reset any inline display left over from a previous search/filter
+		// application - only cards carrying "unlocked-card-visible" are ever
+		// eligible to be shown, so locked achievements can never leak through
+		// a stale or newly-applied filter.
+		card.style.display = "";
+		card.classList.toggle("unlocked-card-visible", unlockedIds.has(id));
 	});
 
 	const unlockedCountEl = document.getElementById("unlocked-section-count");

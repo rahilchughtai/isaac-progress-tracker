@@ -302,7 +302,7 @@ code {
 }
 
 .unlocked-card {
-	display: flex;
+	display: none;
 	flex-direction: column;
 	align-items: center;
 	gap: 0.4rem;
@@ -311,6 +311,11 @@ code {
 	background: var(--accent-green-soft);
 	border: 1px solid var(--accent-green-border);
 	border-radius: 12px;
+	cursor: help;
+}
+
+.unlocked-card.unlocked-card-visible {
+	display: flex;
 	animation: unlocked-pop-in 0.25s ease;
 }
 
@@ -359,11 +364,24 @@ code {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.unlocked-card {
+	.unlocked-card.unlocked-card-visible {
 		animation: none;
 	}
 
 	.unlocked-toggle-chevron {
 		transition: none;
 	}
+}
+
+.popover.unlocked-popover {
+	--bs-popover-max-width: 260px;
+	--bs-popover-bg: var(--bg-elevated);
+	--bs-popover-border-color: var(--accent-green-border);
+	--bs-popover-header-bg: var(--accent-green-soft);
+	--bs-popover-header-color: var(--accent-green-bright);
+	--bs-popover-body-color: var(--text-primary);
+}
+
+.unlocked-popover-content p:last-child {
+	margin-bottom: 0 !important;
 }

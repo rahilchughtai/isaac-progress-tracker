@@ -2,6 +2,31 @@ import type { Unlock, UnlocksData } from "../types/unlocks";
 import { updateMyProgress } from "./progress";
 import { updateFilters, sortByCurrentSelection } from "./filters";
 
+// Bootstrap is loaded globally via CDN <script> tag in index.html, not as an npm module.
+declare const bootstrap: {
+	Popover: new (element: Element, options?: Record<string, unknown>) => unknown;
+};
+
+interface UnlockMeta {
+	categoryName: string;
+	characterName: string;
+	bossName: string;
+	searchData: string;
+}
+
+function computeUnlockMeta(unlock: Unlock, categories: Record<string, string>): UnlockMeta {
+	const categoryName = unlock.category in categories ? categories[unlock.category] : "";
+	const characterName = unlock.as === false ? "" : unlock.as;
+	const bossName = unlock.boss === false ? "" : unlock.boss;
+
+	const searchData = [unlock.name, unlock.displayName, unlock.description, unlock.unlockMethod, characterName, bossName]
+		.join(" ")
+		.toLowerCase()
+		.trim();
+
+	return { categoryName, characterName, bossName, searchData };
+}
+
 function textCell(text: string, classNames: string[] = []): HTMLTableCellElement {
 	const cell = document.createElement("td");
 	cell.classList.add(...classNames);
@@ -23,15 +48,7 @@ function emptyCell(classNames: string[]): HTMLTableCellElement {
 
 function injectUnlockTableRow(unlock: Unlock, categories: Record<string, string>): void {
 	const row = document.createElement("tr");
-
-	const categoryName = unlock.category in categories ? categories[unlock.category] : "";
-	const characterName = unlock.as === false ? "" : unlock.as;
-	const bossName = unlock.boss === false ? "" : unlock.boss;
-
-	const searchData = [unlock.name, unlock.displayName, unlock.description, unlock.unlockMethod, characterName, bossName]
-		.join(" ")
-		.toLowerCase()
-		.trim();
+	const { categoryName, characterName, bossName, searchData } = computeUnlockMeta(unlock, categories);
 
 	row.classList.add("unlock-incomplete");
 	row.setAttribute("data-id", unlock.name);
@@ -157,15 +174,70 @@ function injectUnlockTableRow(unlock: Unlock, categories: Record<string, string>
 	document.querySelector("#unlocks_table tbody")?.appendChild(row);
 }
 
-function injectUnlockedCard(unlock: Unlock): void {
+function buildUnlockedPopoverContent(unlock: Unlock, meta: UnlockMeta): HTMLElement {
+	const wrapper = document.createElement("div");
+	wrapper.classList.add("unlocked-popover-content");
+
+	if (unlock.description !== "") {
+		const description = document.createElement("p");
+		description.classList.add("mb-1", "fst-italic");
+		description.textContent = unlock.description;
+		wrapper.appendChild(description);
+	}
+
+	if (unlock.unlockMethod !== "") {
+		const method = document.createElement("p");
+		method.classList.add("mb-1");
+		method.textContent = unlock.unlockMethod;
+		wrapper.appendChild(method);
+	}
+
+	const details: string[] = [];
+
+	if (meta.characterName !== "") {
+		details.push(`Character: ${meta.characterName}`);
+	}
+
+	if (meta.bossName !== "") {
+		details.push(`Boss: ${meta.bossName}`);
+	}
+
+	if (meta.categoryName !== "") {
+		details.push(`Category: ${meta.categoryName}`);
+	}
+
+	details.push(`Unlocked by ${unlock.percentage.toFixed(1)}% of players`);
+
+	details.forEach((line) => {
+		const p = document.createElement("p");
+		p.classList.add("mb-0", "small", "text-muted");
+		p.textContent = line;
+		wrapper.appendChild(p);
+	});
+
+	return wrapper;
+}
+
+function injectUnlockedCard(unlock: Unlock, categories: Record<string, string>): void {
+	const meta = computeUnlockMeta(unlock, categories);
+
 	const li = document.createElement("li");
 	li.classList.add("unlocked-card");
 	li.setAttribute("data-id", unlock.name);
+	li.setAttribute("data-category-id", String(unlock.category));
+	li.setAttribute("data-character", meta.characterName);
+	li.setAttribute("data-boss", meta.bossName);
+	li.setAttribute("data-search-data", meta.searchData);
+	li.tabIndex = 0;
 
-	const tooltip = unlock.description || unlock.unlockMethod;
-	if (tooltip) {
-		li.title = tooltip;
-	}
+	new bootstrap.Popover(li, {
+		trigger: "hover focus",
+		placement: "top",
+		html: true,
+		title: unlock.displayName,
+		content: buildUnlockedPopoverContent(unlock, meta),
+		customClass: "unlocked-popover",
+	});
 
 	const iconWrap = document.createElement("span");
 	iconWrap.classList.add("unlocked-icon-wrap");
@@ -241,7 +313,7 @@ export function ingestUnlocksData(data: UnlocksData): void {
 	}
 
 	data.unlocks.forEach((unlock) => injectUnlockTableRow(unlock, data.categories));
-	data.unlocks.forEach((unlock) => injectUnlockedCard(unlock));
+	data.unlocks.forEach((unlock) => injectUnlockedCard(unlock, data.categories));
 
 	updateMyProgress();
 	updateFilters();

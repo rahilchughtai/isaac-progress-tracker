@@ -85,23 +85,27 @@ export function initFilters(): void {
 
 		const search = this.value.toLowerCase();
 
-		document.querySelectorAll<HTMLTableRowElement>("#unlocks_table tbody tr.unlock-incomplete").forEach((row) => {
-			const searchData = row.getAttribute("data-search-data") ?? "";
-			row.style.display = searchData.includes(search) ? "" : "none";
-		});
+		document
+			.querySelectorAll<HTMLElement>("#unlocks_table tbody tr.unlock-incomplete, #unlocked-grid .unlocked-card.unlocked-card-visible")
+			.forEach((row) => {
+				const searchData = row.getAttribute("data-search-data") ?? "";
+				row.style.display = searchData.includes(search) ? "" : "none";
+			});
 	});
 
 	filterSelect.addEventListener("change", function () {
 		const filter = this.selectedOptions[0]?.getAttribute("data-filter") ?? "";
 		const value = this.value;
 
-		document.querySelectorAll<HTMLTableRowElement>("#unlocks_table tbody tr.unlock-incomplete").forEach((row) => {
-			if (value === "" || filter === "") {
-				row.style.display = "";
-			} else {
-				row.style.display = row.getAttribute(`data-${filter}`) === value ? "" : "none";
-			}
-		});
+		document
+			.querySelectorAll<HTMLElement>("#unlocks_table tbody tr.unlock-incomplete, #unlocked-grid .unlocked-card.unlocked-card-visible")
+			.forEach((row) => {
+				if (value === "" || filter === "") {
+					row.style.display = "";
+				} else {
+					row.style.display = row.getAttribute(`data-${filter}`) === value ? "" : "none";
+				}
+			});
 
 		(document.getElementById("character-filter") as HTMLSelectElement).value = "";
 		(document.getElementById("boss-filter") as HTMLSelectElement).value = "";
@@ -116,9 +120,11 @@ export function initFilters(): void {
 		filterSelect.value = "";
 		sortSelect.value = "percentage";
 
-		document.querySelectorAll<HTMLTableRowElement>("#unlocks_table tbody tr.unlock-incomplete").forEach((row) => {
-			row.style.display = "";
-		});
+		document
+			.querySelectorAll<HTMLElement>("#unlocks_table tbody tr.unlock-incomplete, #unlocked-grid .unlocked-card.unlocked-card-visible")
+			.forEach((row) => {
+				row.style.display = "";
+			});
 
 		sortSelect.dispatchEvent(new Event("change"));
 	});
