@@ -1,5 +1,5 @@
 {
-	"name": "isaac-progress-tracker",
+	"name": "ray-isaac-tracker",
 	"private": true,
 	"type": "module",
 	"scripts": {
