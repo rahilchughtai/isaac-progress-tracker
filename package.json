@@ -1,17 +1,14 @@
 {
+	"name": "isaac-progress-tracker",
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"————— dev —————": "",
-		"generate-unlocks-json": "docker exec -it isaac-apache-php83-1 php /var/www/html/tools/generate_unlocks_json.php",
-		"————— build —————": "",
-		"build-release": "docker exec -it isaac-apache-php83-1 php /var/www/html/tools/generate_release.php",
-		"publish-release": "aws s3 sync ./src/release/ s3://isaac.pyxol.com/",
-		"————— docker —————": "",
-		"docker-up": "docker compose up -d",
-		"docker-up-dev": "docker compose up",
-		"docker-build": "docker compose build",
-		"docker-restart": "docker compose restart",
-		"docker-stop": "docker compose stop"
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"typescript": "^5.9.3",
+		"vite": "^8.2.2"
 	}
 }
