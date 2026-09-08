@@ -82,6 +82,19 @@ export function updateMyProgress(): void {
 		}
 	});
 
+	document.querySelectorAll<HTMLLIElement>("#unlocked-grid .unlocked-card").forEach((card) => {
+		const id = card.getAttribute("data-id") ?? "";
+		card.style.display = unlockedIds.has(id) ? "" : "none";
+	});
+
+	const unlockedCountEl = document.getElementById("unlocked-section-count");
+
+	if (unlockedCountEl) {
+		unlockedCountEl.textContent = `${numberFormat(numUnlocked)} Unlocked`;
+	}
+
+	document.getElementById("unlocked-section")?.classList.toggle("d-none", numUnlocked === 0);
+
 	let progressText = "";
 
 	if (numUnlocked > 0) {

@@ -157,6 +157,43 @@ function injectUnlockTableRow(unlock: Unlock, categories: Record<string, string>
 	document.querySelector("#unlocks_table tbody")?.appendChild(row);
 }
 
+function injectUnlockedCard(unlock: Unlock): void {
+	const li = document.createElement("li");
+	li.classList.add("unlocked-card");
+	li.setAttribute("data-id", unlock.name);
+
+	const tooltip = unlock.description || unlock.unlockMethod;
+	if (tooltip) {
+		li.title = tooltip;
+	}
+
+	const iconWrap = document.createElement("span");
+	iconWrap.classList.add("unlocked-icon-wrap");
+
+	const img = document.createElement("img");
+	img.src = unlock.icon;
+	img.loading = "lazy";
+	img.alt = "";
+	img.width = 48;
+	img.height = 48;
+	iconWrap.appendChild(img);
+
+	const badge = document.createElement("span");
+	badge.classList.add("unlocked-badge");
+	badge.setAttribute("aria-hidden", "true");
+	badge.textContent = "✓";
+	iconWrap.appendChild(badge);
+
+	li.appendChild(iconWrap);
+
+	const name = document.createElement("span");
+	name.classList.add("unlocked-name");
+	name.textContent = unlock.displayName;
+	li.appendChild(name);
+
+	document.querySelector("#unlocked-grid")?.appendChild(li);
+}
+
 function populateFilterOptions(
 	optgroupId: string,
 	values: string[],
@@ -204,6 +241,7 @@ export function ingestUnlocksData(data: UnlocksData): void {
 	}
 
 	data.unlocks.forEach((unlock) => injectUnlockTableRow(unlock, data.categories));
+	data.unlocks.forEach((unlock) => injectUnlockedCard(unlock));
 
 	updateMyProgress();
 	updateFilters();
