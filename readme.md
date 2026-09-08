@@ -1,6 +1,4 @@
-# Isaac Progress Tracker
-
-**https://isaac.pyxol.com/**
+# Ray Isaac Tracker
 
 ## Features
 
