@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
+	<script>
+		try { if (localStorage.getItem("hiba-mode") === "true") document.documentElement.setAttribute("data-hiba-mode", ""); } catch {}
+	</script>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#0d0817">
 	<title>Recommended Unlocks · Ray Isaac Tracker</title>
@@ -10,6 +13,7 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -31,6 +35,11 @@
 			</div>
 
 			<ul class="navbar-nav d-flex flex-row align-items-center ms-auto">
+				<li class="nav-item form-check form-switch d-flex align-items-center me-3">
+					<input class="form-check-input" type="checkbox" role="switch" id="hiba-mode-toggle">
+					<label class="form-check-label ms-2 small" for="hiba-mode-toggle">Hiba Mode</label>
+				</li>
+
 				<li class="nav-item">
 					<a class="nav-link" href="/">All Unlocks</a>
 				</li>

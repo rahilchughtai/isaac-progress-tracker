@@ -6,10 +6,12 @@ import { ingestUnlocksData } from "./modules/unlocks-table";
 import { initFilters } from "./modules/filters";
 import { loadStoredProgress, setUnlockedIds, updateMyProgress } from "./modules/progress";
 import { initSaveFileModal } from "./modules/save-file-modal";
+import { initHibaMode } from "./modules/hiba-mode";
 
 const data = unlocksData as UnlocksData;
 const qualityMap = itemQuality as ItemQualityMap;
 
+initHibaMode();
 initFilters();
 ingestUnlocksData(data, qualityMap);
 
