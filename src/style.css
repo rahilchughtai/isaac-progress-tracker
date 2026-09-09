@@ -97,7 +97,9 @@ a {
 	color: var(--text-muted) !important;
 }
 
-.navbar-brand {
+.navbar-brand,
+.navbar-brand:hover,
+.navbar-brand:focus {
 	font-size: 1.15rem;
 	letter-spacing: 0.01em;
 	background: linear-gradient(90deg, var(--brand-text-gradient-1), var(--brand-text-gradient-2));
@@ -238,6 +240,7 @@ a {
 	--bs-table-bg: transparent;
 	--bs-table-hover-bg: var(--surface-hover);
 	--bs-table-color: var(--text-primary);
+	--bs-table-hover-color: var(--text-primary);
 }
 
 #unlocks_table thead th {
@@ -580,10 +583,10 @@ code {
 	--text-muted: #93447c;
 	--accent-green: #34d399;
 	--accent-green-rgb: 52, 211, 153;
-	--accent-green-bright: #6ee7b7;
-	--accent-green-bright-rgb: 110, 231, 183;
-	--accent-green-soft: rgba(52, 211, 153, 0.15);
-	--accent-green-border: rgba(52, 211, 153, 0.4);
+	--accent-green-bright: #0d8a5f;
+	--accent-green-bright-rgb: 13, 138, 95;
+	--accent-green-soft: rgba(52, 211, 153, 0.22);
+	--accent-green-border: rgba(52, 211, 153, 0.5);
 	--quality-4: #ffd166;
 	--quality-3: #c9a7f5;
 	--quality-2: #7dd3fc;
