@@ -19,6 +19,22 @@
 	--quality-2: #60a5fa;
 	--quality-1: #8b98a9;
 	--quality-0: #6b7280;
+	--brand-purple-rgb: 139, 92, 246;
+	--brand-pink-rgb: 217, 70, 239;
+	--accent-green-rgb: 34, 197, 94;
+	--accent-green-bright-rgb: 74, 222, 128;
+	--link-color: #c4b5fd;
+	--link-hover-color: #e9d5ff;
+	--link-color-rgb: 196, 181, 253;
+	--navbar-bg-1: rgba(28, 15, 48, 0.92);
+	--navbar-bg-2: rgba(16, 10, 28, 0.92);
+	--brand-text-gradient-1: #d8b4fe;
+	--brand-text-gradient-2: #f0abfc;
+	--btn-hover-gradient-1: #9d6bff;
+	--btn-hover-gradient-2: #e879f9;
+	--alert-text: #f5d0fe;
+	--badge-text-dark: #06240f;
+	--font-primary: "Space Grotesk", system-ui, -apple-system, sans-serif;
 }
 
 * {
@@ -41,12 +57,12 @@
 
 body {
 	background:
-		radial-gradient(ellipse 80% 50% at 50% -10%, rgba(139, 92, 246, 0.25), transparent),
-		radial-gradient(ellipse 60% 40% at 90% 10%, rgba(217, 70, 239, 0.12), transparent),
+		radial-gradient(ellipse 80% 50% at 50% -10%, rgba(var(--brand-purple-rgb), 0.25), transparent),
+		radial-gradient(ellipse 60% 40% at 90% 10%, rgba(var(--brand-pink-rgb), 0.12), transparent),
 		var(--bg-deep);
 	background-attachment: fixed;
 	color: var(--text-primary);
-	font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+	font-family: var(--font-primary);
 	min-height: 100vh;
 }
 
@@ -54,31 +70,37 @@ body {
 	--bs-body-bg: transparent;
 	--bs-body-color: var(--text-primary);
 	--bs-primary: var(--brand-purple);
-	--bs-primary-rgb: 139, 92, 246;
-	--bs-link-color: #c4b5fd;
-	--bs-link-color-rgb: 196, 181, 253;
-	--bs-link-hover-color: #e9d5ff;
+	--bs-primary-rgb: var(--brand-purple-rgb);
+	--bs-link-color: var(--link-color);
+	--bs-link-color-rgb: var(--link-color-rgb);
+	--bs-link-hover-color: var(--link-hover-color);
 	--bs-border-color: var(--border-subtle);
 	--bs-secondary-bg: var(--surface);
 	--bs-tertiary-bg: var(--surface);
 }
 
 a {
-	text-decoration-color: rgba(196, 181, 253, 0.4);
+	text-decoration-color: rgba(var(--link-color-rgb), 0.4);
 }
 
 /* navbar */
 
 .navbar {
-	background: linear-gradient(90deg, rgba(28, 15, 48, 0.92), rgba(16, 10, 28, 0.92));
+	background: linear-gradient(90deg, var(--navbar-bg-1), var(--navbar-bg-2));
 	backdrop-filter: blur(10px);
 	border-bottom: 1px solid var(--border-subtle);
+}
+
+.navbar-text,
+.nav-link,
+.text-muted {
+	color: var(--text-muted) !important;
 }
 
 .navbar-brand {
 	font-size: 1.15rem;
 	letter-spacing: 0.01em;
-	background: linear-gradient(90deg, #d8b4fe, #f0abfc);
+	background: linear-gradient(90deg, var(--brand-text-gradient-1), var(--brand-text-gradient-2));
 	-webkit-background-clip: text;
 	background-clip: text;
 	color: transparent;
@@ -89,15 +111,15 @@ a {
 	height: 20px;
 	border-radius: 6px;
 	background: linear-gradient(135deg, var(--brand-purple), var(--brand-pink));
-	box-shadow: 0 0 16px rgba(139, 92, 246, 0.65);
+	box-shadow: 0 0 16px rgba(var(--brand-purple-rgb), 0.65);
 	transform: rotate(45deg);
 	flex-shrink: 0;
 }
 
 .brand-badge {
-	background: rgba(139, 92, 246, 0.15);
-	color: #d8b4fe;
-	border: 1px solid rgba(139, 92, 246, 0.4);
+	background: rgba(var(--brand-purple-rgb), 0.15);
+	color: var(--brand-text-gradient-1);
+	border: 1px solid rgba(var(--brand-purple-rgb), 0.4);
 	font-size: 0.65rem;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
@@ -115,7 +137,7 @@ a {
 /* buttons */
 
 .btn {
-	font-family: "Space Grotesk", system-ui, sans-serif;
+	font-family: var(--font-primary);
 	font-weight: 600;
 	border-radius: 999px;
 	transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
@@ -124,13 +146,13 @@ a {
 .btn-primary {
 	background: linear-gradient(135deg, var(--brand-purple), var(--brand-pink));
 	border: none;
-	box-shadow: 0 4px 18px rgba(139, 92, 246, 0.35);
+	box-shadow: 0 4px 18px rgba(var(--brand-purple-rgb), 0.35);
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
-	background: linear-gradient(135deg, #9d6bff, #e879f9);
-	box-shadow: 0 6px 24px rgba(217, 70, 239, 0.45);
+	background: linear-gradient(135deg, var(--btn-hover-gradient-1), var(--btn-hover-gradient-2));
+	box-shadow: 0 6px 24px rgba(var(--brand-pink-rgb), 0.45);
 	transform: translateY(-1px);
 }
 
@@ -171,11 +193,26 @@ a {
 	background: var(--surface);
 	color: var(--text-primary);
 	border-color: var(--brand-purple);
-	box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25);
+	box-shadow: 0 0 0 0.2rem rgba(var(--brand-purple-rgb), 0.25);
 }
 
 .form-control::placeholder {
 	color: var(--text-muted);
+}
+
+.form-check-input {
+	background-color: var(--surface);
+	border-color: var(--border-subtle);
+}
+
+.form-check-input:checked {
+	background-color: var(--brand-purple);
+	border-color: var(--brand-purple);
+}
+
+.form-check-input:focus {
+	border-color: var(--brand-purple);
+	box-shadow: 0 0 0 0.2rem rgba(var(--brand-purple-rgb), 0.25);
 }
 
 .sort-direction-toggle {
@@ -189,7 +226,9 @@ a {
 
 /* table + filters bar */
 
-#table-manager {
+#table-manager,
+#recommended-manager,
+.bg-body-tertiary {
 	background: var(--surface) !important;
 	border: 1px solid var(--border-subtle);
 	border-radius: 14px;
@@ -255,9 +294,9 @@ a {
 }
 
 .alert-danger {
-	background: rgba(217, 70, 239, 0.12);
-	border: 1px solid rgba(217, 70, 239, 0.35);
-	color: #f5d0fe;
+	background: rgba(var(--brand-pink-rgb), 0.12);
+	border: 1px solid rgba(var(--brand-pink-rgb), 0.35);
+	color: var(--alert-text);
 }
 
 code {
@@ -306,18 +345,18 @@ code {
 }
 
 .section-toggle-green:hover {
-	background: rgba(34, 197, 94, 0.2);
+	background: rgba(var(--accent-green-rgb), 0.2);
 	border-color: var(--accent-green-bright);
 }
 
 .section-toggle-purple {
-	background: rgba(139, 92, 246, 0.12);
+	background: rgba(var(--brand-purple-rgb), 0.12);
 	border: 1px solid var(--border-subtle);
 	color: var(--brand-violet);
 }
 
 .section-toggle-purple:hover {
-	background: rgba(139, 92, 246, 0.2);
+	background: rgba(var(--brand-purple-rgb), 0.2);
 	border-color: var(--brand-violet);
 }
 
@@ -370,10 +409,10 @@ code {
 	justify-content: center;
 	font-size: 0.65rem;
 	line-height: 1;
-	color: #06240f;
+	color: var(--badge-text-dark);
 	background: linear-gradient(135deg, var(--accent-green-bright), var(--accent-green));
 	border-radius: 50%;
-	box-shadow: 0 0 8px rgba(74, 222, 128, 0.7);
+	box-shadow: 0 0 8px rgba(var(--accent-green-bright-rgb), 0.7);
 }
 
 .unlocked-name {
@@ -431,7 +470,7 @@ code {
 	gap: 0.4rem;
 	text-align: center;
 	padding: 0.75rem 0.5rem;
-	background: rgba(139, 92, 246, 0.08);
+	background: rgba(var(--brand-purple-rgb), 0.08);
 	border: 1px solid var(--border-subtle);
 	border-radius: 12px;
 	cursor: help;
@@ -463,7 +502,7 @@ code {
 	border-radius: 999px;
 	font-weight: 700;
 	font-size: 0.75rem;
-	color: #06240f;
+	color: var(--badge-text-dark);
 }
 
 .quality-badge-4 {
@@ -518,4 +557,70 @@ code {
 .quality-badge-overlay-alt {
 	top: -6px;
 	right: -6px;
+}
+
+/* Hiba Mode - a cute pastel alternate theme, toggled by a checkbox and
+   persisted to localStorage (see src/modules/hiba-mode.ts). Every color in
+   the app is driven by the variables below, so enabling this attribute on
+   <html> re-themes the whole site without touching any other rule. */
+
+:root[data-hiba-mode] {
+	--brand-purple: #ff8fc7;
+	--brand-purple-dark: #f472b6;
+	--brand-purple-rgb: 255, 143, 199;
+	--brand-violet: #c9a7f5;
+	--brand-pink: #ff6fb0;
+	--brand-pink-rgb: 255, 111, 176;
+	--bg-deep: #fff0f7;
+	--bg-elevated: #ffffff;
+	--surface: #ffe4f1;
+	--surface-hover: #ffd1e8;
+	--border-subtle: rgba(244, 114, 182, 0.25);
+	--text-primary: #5b2a52;
+	--text-muted: #93447c;
+	--accent-green: #34d399;
+	--accent-green-rgb: 52, 211, 153;
+	--accent-green-bright: #6ee7b7;
+	--accent-green-bright-rgb: 110, 231, 183;
+	--accent-green-soft: rgba(52, 211, 153, 0.15);
+	--accent-green-border: rgba(52, 211, 153, 0.4);
+	--quality-4: #ffd166;
+	--quality-3: #c9a7f5;
+	--quality-2: #7dd3fc;
+	--quality-1: #f3a6c1;
+	--quality-0: #d4a5c4;
+	--link-color: #d6337a;
+	--link-hover-color: #b3005c;
+	--link-color-rgb: 214, 51, 122;
+	--navbar-bg-1: rgba(255, 240, 247, 0.9);
+	--navbar-bg-2: rgba(255, 228, 241, 0.9);
+	--brand-text-gradient-1: #ff8fc7;
+	--brand-text-gradient-2: #ff6fb0;
+	--btn-hover-gradient-1: #ffa6d4;
+	--btn-hover-gradient-2: #ff8fc7;
+	--alert-text: #b3005c;
+	--badge-text-dark: #4a1942;
+	--font-primary: "Quicksand", "Space Grotesk", system-ui, sans-serif;
+}
+
+/* a few boxier components get extra rounding for the cuter look */
+:root[data-hiba-mode] .unlocked-card,
+:root[data-hiba-mode] .recommend-card,
+:root[data-hiba-mode] .modal-content,
+:root[data-hiba-mode] #table-manager,
+:root[data-hiba-mode] #recommended-manager,
+:root[data-hiba-mode] .bg-body-tertiary,
+:root[data-hiba-mode] .form-control,
+:root[data-hiba-mode] .form-select {
+	border-radius: 20px;
+}
+
+:root[data-hiba-mode] .brand-mark {
+	border-radius: 50%;
+	transform: none;
+}
+
+:root[data-hiba-mode] .form-check-input:checked {
+	background-color: var(--brand-pink);
+	border-color: var(--brand-pink);
 }
